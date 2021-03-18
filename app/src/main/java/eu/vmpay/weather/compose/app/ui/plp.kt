@@ -10,35 +10,73 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
+import androidx.navigation.compose.rememberNavController
 import dev.chrisbanes.accompanist.coil.CoilImage
 import eu.vmpay.weather.compose.app.models.ItemModel
 import eu.vmpay.weather.compose.app.viewmodels.ListViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Preview
+@Composable
+fun ItemListScreenPreview() {
+    ItemListSuccessState(rememberNavController(), listOf())
+}
+
+@Preview
+@Composable
+fun ItemListLoadingScreenPreview() {
+    LoadingState()
+}
+
+@Preview
+@Composable
+fun ItemListEmptyScreenPreview() {
+    ItemListEmptyState()
+}
+
 @Composable
 fun ItemListScreen(navController: NavHostController) {
     val viewModel: ListViewModel = viewModel()
     viewModel.isLoading.observeAsState().value?.let {
-        if (it) CircularProgressIndicator()
+        if (it) LoadingState()
     }
     viewModel.listLD.observeAsState().value?.let { list ->
         if (list.isNotEmpty())
-            LazyColumn(content = {
-                items(list.size, itemContent = { index ->
-                    ItemRowWidget(item = list[index], navController)
-                })
-            })
-        else Text("List is empty")
+            ItemListSuccessState(navController, list)
+        else ItemListEmptyState()
+    }
+}
+
+@Composable
+fun ItemListSuccessState(navController: NavHostController, list: List<ItemModel>) {
+    LazyColumn(content = {
+        items(list.size, itemContent = { index ->
+            ItemRowWidget(item = list[index], navController)
+        })
+    })
+}
+
+@Composable
+fun ItemListEmptyState() {
+    Text("List is empty")
+}
+
+@Composable
+fun LoadingState() {
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        CircularProgressIndicator()
     }
 }
 
@@ -50,9 +88,7 @@ fun ItemRowWidget(item: ItemModel, navController: NavHostController) {
             data = item.image,
             contentDescription = item.title,
             loading = {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator()
-                }
+                LoadingState()
             },
             error = {
                 Image(

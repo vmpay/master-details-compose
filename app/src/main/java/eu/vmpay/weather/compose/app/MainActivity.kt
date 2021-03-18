@@ -5,8 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -27,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                         NavHost(navController = navController, startDestination = "plp") {
                             composable("plp") { ItemListScreen(navController) }
                             composable("pdp/{id}") {
-                                ItemDetailsScreen(navController, it.arguments?.getString("id"))
+                                ItemDetailsScreen(it.arguments?.getString("id"))
                             }
                         }
                     }
@@ -37,8 +35,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    ItemListScreen(rememberNavController())
-}
