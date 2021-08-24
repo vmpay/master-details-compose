@@ -1,16 +1,16 @@
 package eu.vmpay.weather.compose.app.viewmodels
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import eu.vmpay.weather.compose.app.models.ItemModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.random.Random
 
-class ListViewModel : ViewModel() {
-
-    val isLoading = MutableLiveData<Boolean>()
+@HiltViewModel
+class ListViewModel @Inject constructor() : BaseViewModel() {
     val listLD = MutableLiveData<List<ItemModel>>()
 
     init {

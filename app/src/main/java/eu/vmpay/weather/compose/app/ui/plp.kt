@@ -47,8 +47,7 @@ fun ItemListEmptyScreenPreview() {
 }
 
 @Composable
-fun ItemListScreen(navController: NavHostController) {
-    val viewModel: ListViewModel = viewModel()
+fun ItemListScreen(navController: NavHostController, viewModel: ListViewModel = viewModel()) {
     viewModel.isLoading.observeAsState().value?.let {
         if (it) LoadingState()
     }
