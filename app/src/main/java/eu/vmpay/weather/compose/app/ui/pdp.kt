@@ -44,7 +44,7 @@ fun ItemDetailsScreen(id: String?, viewModel: DetailsViewModel = viewModel()) {
                 },
                 error = {
                     Image(
-                        painter = painterResource(id = R.drawable.notification_template_icon_bg),
+                        painter = painterResource(id = android.R.drawable.stat_notify_error),
                         contentDescription = null,
                         modifier = Modifier
                             .height(180.dp)

@@ -91,7 +91,7 @@ fun ItemRowWidget(item: ItemModel, navController: NavHostController) {
             },
             error = {
                 Image(
-                    painter = painterResource(id = R.drawable.notification_template_icon_bg),
+                    painter = painterResource(id = android.R.drawable.stat_notify_error),
                     contentDescription = null,
                     modifier = Modifier
                         .height(180.dp)
@@ -104,6 +104,7 @@ fun ItemRowWidget(item: ItemModel, navController: NavHostController) {
                 .height(180.dp)
                 .clickable {
                     navController.navigate("pdp/${item.id}")
+//                    navController.navigate(Uri.parse("pdp/${item.id}"))
                 }
                 .fillMaxWidth()
                 .clip(shape = RoundedCornerShape(8.dp)),
