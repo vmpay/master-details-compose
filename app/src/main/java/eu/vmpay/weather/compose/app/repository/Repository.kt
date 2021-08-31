@@ -13,6 +13,10 @@ class Repository @Inject constructor(
     private val picsumService: PicsumService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
+    suspend fun getPictureList(): List<ItemDetailsModel> = withContext(ioDispatcher) {
+        picsumService.getPictureList()
+    }
+
     suspend fun getPictureDetails(id: String): ItemDetailsModel = withContext(ioDispatcher) {
         picsumService.getPictureDetails(id)
     }

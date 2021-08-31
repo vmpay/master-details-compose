@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                             composable("pdp/{id}") {
                                 val id: String? = it.arguments?.getString("id")
                                 detailsViewModel.getDetails(id)
-                                ItemDetailsScreen(id, detailsViewModel)
+                                ItemDetailsScreen(detailsViewModel)
                             }
                         }
                     }

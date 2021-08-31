@@ -24,11 +24,11 @@ import eu.vmpay.weather.compose.app.viewmodels.DetailsViewModel
 @Preview
 @Composable
 fun ItemDetailsScreenPreview() {
-    ItemDetailsScreen("123")
+    ItemDetailsScreen()
 }
 
 @Composable
-fun ItemDetailsScreen(id: String?, viewModel: DetailsViewModel = viewModel()) {
+fun ItemDetailsScreen(viewModel: DetailsViewModel = viewModel()) {
     with(viewModel) {
         isLoading.observeAsState().value?.let {
             if (it) LoadingState()
@@ -81,7 +81,7 @@ fun DetailsSuccessState(itemDetailsModel: ItemDetailsModel) {
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            "ID: $itemDetailsModel",
+            "ID: ${itemDetailsModel.id}",
             style = typography.h6,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis

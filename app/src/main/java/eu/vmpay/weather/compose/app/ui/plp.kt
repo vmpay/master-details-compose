@@ -23,7 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import androidx.navigation.compose.rememberNavController
 import dev.chrisbanes.accompanist.coil.CoilImage
-import eu.vmpay.weather.compose.app.models.ItemModel
+import eu.vmpay.weather.compose.app.models.ItemDetailsModel
 import eu.vmpay.weather.compose.app.viewmodels.ListViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,18 +48,25 @@ fun ItemListEmptyScreenPreview() {
 
 @Composable
 fun ItemListScreen(navController: NavHostController, viewModel: ListViewModel = viewModel()) {
-    viewModel.isLoading.observeAsState().value?.let {
-        if (it) LoadingState()
-    }
-    viewModel.listLD.observeAsState().value?.let { list ->
-        if (list.isNotEmpty())
-            ItemListSuccessState(navController, list)
-        else ItemListEmptyState()
+    with(viewModel) {
+        isLoading.observeAsState().value?.let {
+            if (it) LoadingState()
+        }
+        listLD.observeAsState().value?.let { list ->
+            if (list.isNotEmpty())
+                ItemListSuccessState(navController, list)
+            else ItemListEmptyState()
+        }
+        isError.observeAsState().value?.let {
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Text(text = it)
+            }
+        }
     }
 }
 
 @Composable
-fun ItemListSuccessState(navController: NavHostController, list: List<ItemModel>) {
+fun ItemListSuccessState(navController: NavHostController, list: List<ItemDetailsModel>) {
     LazyColumn(content = {
         items(list.size, itemContent = { index ->
             ItemRowWidget(item = list[index], navController)
@@ -80,12 +87,12 @@ fun LoadingState() {
 }
 
 @Composable
-fun ItemRowWidget(item: ItemModel, navController: NavHostController) {
+fun ItemRowWidget(item: ItemDetailsModel, navController: NavHostController) {
     val typography = MaterialTheme.typography
     Column(modifier = Modifier.padding(16.dp)) {
         CoilImage(
-            data = item.image,
-            contentDescription = item.title,
+            data = item.downloadURL,
+            contentDescription = item.author,
             loading = {
                 LoadingState()
             },
@@ -111,14 +118,17 @@ fun ItemRowWidget(item: ItemModel, navController: NavHostController) {
         )
         Spacer(Modifier.height(16.dp))
         Text(
-            item.title,
+            item.author,
             style = typography.h6,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        Text(item.location, style = typography.body2)
+        Text("item.location", style = typography.body2)
         Text(
-            SimpleDateFormat("MMMM yyyy", Locale.getDefault()).format(Date(item.timeStamp)),
+            SimpleDateFormat(
+                "MMMM yyyy",
+                Locale.getDefault()
+            ).format(Date(System.currentTimeMillis())),
             style = typography.body2
         )
     }
